@@ -59,12 +59,22 @@ $(function() {
         * the CSS to determine how we're performing the
         * hiding/showing of the menu element.
         */
+       const body = document.getElementsByTagName('body')[0];
+       it('should have menu hidden', function() {
+            expect(body.classList.contains('menu-hidden')).toBe(true);
+       });
+       
 
         /* TODO: Write a test that ensures the menu changes
         * visibility when the menu icon is clicked. This test
         * should have two expectations: does the menu display when
         * clicked and does it hide when clicked again.
         */
+       it('ensure menu visibility', function() {
+            const menuIcon = document.querySelector('.menu-icon-link');
+            menuIcon.click();
+            expect(body.classList.contains('menu-hidden')).toBe(false);
+       });
     });
         
    
@@ -77,16 +87,40 @@ $(function() {
         * Remember, loadFeed() is asynchronous so this test will require
         * the use of Jasmine's beforeEach and asynchronous done() function.
         */
+       beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
+            
+       });
+       it('load feed has at least one entry for container', function(done) {
+           
+           const feedContainer = document.querySelector('.feed');
+           expect(feedContainer.children.length).toBeGreaterThan(0);
+           done();
+       });
     });
     
 
     /* TODO: Write a new test suite named "New Feed Selection" */
-    describe(function() {
+    describe('New Feed Selection', function() {
         /* TODO: Write a test that ensures when a new feed is loaded
         * by the loadFeed function that the content actually changes.
         * Remember, loadFeed() is asynchronous.
         */
+       beforeEach(function(done) {
+            loadFeed(1, function() {
+                done();
+            });
+            
+        });
         
+        it('load different content', function(done) {
+           
+            const entry = document.querySelector('.entry-link');
+            expect(entry.getAttribute('href').includes('css-tricks')).toBe(true);
+            done();
+        });
     });
 
     
