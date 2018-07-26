@@ -65,6 +65,8 @@ $(function() {
             const menuIcon = document.querySelector('.menu-icon-link');
             menuIcon.click();
             expect(body.classList.contains('menu-hidden')).toBe(false);
+            menuIcon.click();
+            expect(body.classList.contains('menu-hidden')).toBe(true);
        });
     });
         
@@ -85,8 +87,8 @@ $(function() {
         */
        it('load feed has at least one entry for container', function(done) {
            
-           const feedContainer = document.querySelector('.feed');
-           expect(feedContainer.children.length).toBeGreaterThan(0);
+            const feedContainers = document.querySelectorAll('.feed .entry');
+           expect(feedContainers.length).toBeGreaterThan(0);
            done();
        });
     });
@@ -94,10 +96,15 @@ $(function() {
 
     // New Feed Selection test suite
     describe('New Feed Selection', function() {
-      
+       let firstFeed;  
+       let secondFeed;
        beforeEach(function(done) {
-            loadFeed(1, function() {
-                done();
+            loadFeed(0, function() {
+                firstFeed = document.querySelector('.feed').innerHTML;  // set the value of the first feed
+                loadFeed(1, function() {
+                    secondFeed = document.querySelector('.feed').innerHTML;  // set the value of th second feed
+                    done();
+                });
             });
             
         });
@@ -106,7 +113,7 @@ $(function() {
         it('load different content', function(done) {
 
             const entry = document.querySelector('.entry-link');
-            expect(entry.getAttribute('href').includes('css-tricks')).toBe(true);
+            expect(firstFeed).not.toBe(secondFeed);    // compare entries
             done();
         });
     });
